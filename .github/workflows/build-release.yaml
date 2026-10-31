@@ -37,6 +37,14 @@ jobs:
           fi
           echo "RELEASE_VERSION=$TAG" >> $GITHUB_ENV
 
+      - name: Set up Node with npm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          # standalone/service/package-lock.json is gitignored, so key on the tracked one.
+          cache-dependency-path: service/package-lock.json
+
       - name: Install modules, transpile service and build service for DIAL
         working-directory: service
         run: |
