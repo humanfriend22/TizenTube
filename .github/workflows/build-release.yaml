@@ -42,19 +42,20 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          # standalone/service/package-lock.json is gitignored, so key on the tracked one.
-          cache-dependency-path: service/package-lock.json
+          cache-dependency-path: |
+            service/package-lock.json
+            standalone/service/package-lock.json
 
       - name: Install modules, transpile service and build service for DIAL
         working-directory: service
         run: |
-          npm install
+          npm ci
           npx rollup -c rollup.config.js
 
       - name: Install modules, transpile service and build service
         working-directory: standalone/service
         run: |
-          npm install
+          npm ci
           npm install -g @vercel/ncc https://github.com/reisxd/tizen.js/tarball/main
           npm run build
 
