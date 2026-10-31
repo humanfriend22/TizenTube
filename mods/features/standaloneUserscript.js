@@ -51,10 +51,10 @@ export default function () {
                         credentials: input.credentials,
                     };
 
-                    if (input.body && !input.bodyUsed) {
-                        const requestClone = input.clone();
+                    // Tizen 3-5 Chromium has no Request.body, so don't rely on it to detect a body.
+                    if (input.method !== 'GET' && input.method !== 'HEAD' && !input.bodyUsed) {
                         return input.clone().arrayBuffer().then(function (buffer) {
-                            modifiedOptions.body = buffer;
+                            if (buffer.byteLength) modifiedOptions.body = buffer;
 
                             return originalFetch(targetUrl, modifiedOptions);
                         });
